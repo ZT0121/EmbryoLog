@@ -287,7 +287,7 @@ async function apiPost(fn, payload){
           <div class="ctrl">
             <label>D1 Call</label>
             <input type="checkbox" ${t.state?.d1_call?'checked':''}
-              onchange="upd('${t.mrn}','${t.d0}','D1 Call', this.checked)">
+              onchange="upd('${t.mrn}','${t.d0}','D1 Call', this.checked, true)">
           </div>
           <div class="ctrl">
             <label>D1 Rescue</label>
