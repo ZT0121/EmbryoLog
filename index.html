@@ -98,13 +98,22 @@
     .colhead small{font-weight:700; color:rgba(0,0,0,.55)}
     .colbody{padding:10px 10px 12px; background:rgba(255,255,255,.65)}
     
-    /* ✨ 新增：標題列上的負責人名字樣式 */
-    .op-head {
-      font-size: 0.9em;
-      color: #555;
-      margin-left: 6px;
-      font-weight: 700;
-    }
+  /* ✨ 讓負責人名字變成漂亮的膠囊樣式 */
+  .op-head {
+  display: inline-block;       /* 讓它可以設定 padding */
+  font-size: 11px;             /* 字縮小一點，更精緻 */
+  color: #0d47a1;              /* 深藍色字 */
+  background-color: #e3f2fd;   /* 淡藍色底 (跟之前的 badge 同色系) */
+  padding: 2px 8px;            /* 內距，撐開膠囊 */
+  border-radius: 99px;         /* 圓角 */
+  margin-left: 8px;            /* 離 D5 遠一點 */
+  font-weight: 700;
+  vertical-align: middle;      /* 垂直置中 */
+  border: 1px solid #bbdefb;   /* 淡淡的邊框 */
+  
+  /* 如果沒人名時，自動隱藏空膠囊 */
+  &:empty { display: none; }
+}
 
     .card{
       background:var(--card); border:1px solid var(--line); border-radius:16px;
@@ -138,6 +147,8 @@
     }
     .ctrl input[type="checkbox"]{transform: scale(1.2);}
     .empty{color:var(--muted); font-size:12px; padding:12px}
+
+    
   </style>
 </head>
 
@@ -404,8 +415,8 @@ function cardHTML(day, t){
     const opName = (arr.length > 0 && arr[0].culture) ? arr[0].culture : '';
     const opEl = document.getElementById('op'+day);
     if(opEl) {
-      // 顯示格式： (映)
-      opEl.textContent = opName ? `(${opName})` : ''; 
+
+      opEl.textContent = opName ? opName : '';
     }
 
     const box = $('list'+day);
