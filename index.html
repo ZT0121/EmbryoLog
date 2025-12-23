@@ -112,6 +112,20 @@
       border:1px solid var(--line); color:#3b3b3b; background:#fafafa;
     }
 
+    /* ✨ 新增 Culture 標籤樣式 */
+    .culture-badge {
+      display: inline-block;
+      background-color: #e3f2fd; /* 淡藍色底 */
+      color: #0d47a1;           /* 深藍色字 */
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid #bbdefb;
+      margin-right: 4px;        /* 與病歷號的間距 */
+      vertical-align: middle;
+    }
+    
     .controls{display:grid; gap:8px; margin-top:10px}
     .ctrl{
       display:flex; align-items:center; justify-content:space-between; gap:10px;
@@ -259,9 +273,14 @@ async function apiPost(fn, payload){
     `).join('');
   }
 
-  function cardHTML(day, t){
+function cardHTML(day, t){
     const meta = `${t.d0} · ${escapeHtml(t.doctor)} · ${escapeHtml(t.therapy)}`;
     const note = t.note ? `<div class="meta">備註：${escapeHtml(t.note)}</div>` : '';
+
+    // ✨ 處理 Culture 顯示 HTML
+    const cultureHtml = t.culture 
+      ? `<span class="culture-badge">🧫 ${escapeHtml(t.culture)}</span>` 
+      : '';
 
     const tags = [];
     if (t.state?.needD3) tags.push('需要D3回報');
@@ -269,7 +288,7 @@ async function apiPost(fn, payload){
     if (t.state?.add_d7) tags.push('Add D7');
     const tagHtml = tags.length ? `<div class="tags">${tags.map(x=>`<span class="tag">${x}</span>`).join('')}</div>` : '';
 
-    // ✅ 姓名換行（Google Sheet 的換行符）
+    // 姓名換行
     const nameHtml = escapeHtml(t.name || '').replace(/\n/g, '<br>');
 
     let controls = '';
