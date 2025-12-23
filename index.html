@@ -374,7 +374,9 @@ function cardHTML(day, t){
       <div class="card">
         <div class="row1">
           <div class="name">${nameHtml}</div>
-          <div class="mrn">${escapeHtml(t.mrn || '')}</div>
+          <div class="mrn">
+          ${cultureHtml}
+          ${escapeHtml(t.mrn || '')}</div>
         </div>
         <div class="meta">${escapeHtml(meta)}</div>
         ${note}
