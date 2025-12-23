@@ -9,7 +9,6 @@
   <meta name="theme-color" content="#e6ecef">
   <link rel="icon" href="./favicon.png" type="image/png">
   
-  <!-- ICON / FAVICON -->
   <link rel="icon" type="image/png"
         href="https://drive.google.com/uc?export=view&id=1MwiYzHvmYyHfBCj1S9OIShy3vc3YIzmU">
   <link rel="apple-touch-icon"
@@ -98,12 +97,26 @@
     }
     .colhead small{font-weight:700; color:rgba(0,0,0,.55)}
     .colbody{padding:10px 10px 12px; background:rgba(255,255,255,.65)}
+    
+    /* ✨ 新增：標題列上的負責人名字樣式 */
+    .op-head {
+      font-size: 0.9em;
+      color: #555;
+      margin-left: 6px;
+      font-weight: 700;
+    }
+
     .card{
       background:var(--card); border:1px solid var(--line); border-radius:16px;
       padding:10px; margin-bottom:10px;
     }
-    .row1{display:flex; align-items:align-items: baseline; justify-content:space-between; gap:10px}
-    .mrn{font-family:var(--mono); font-size:12px; color:var(--muted); white-space:nowrap; display:flex; align-items:center; justify-content:flex-end; gap:6px}
+    
+    /* ✨ 修正：移除了重複的 align-items，改回最乾淨的 flex-start */
+    .row1{display:flex; align-items:flex-start; justify-content:space-between; gap:10px}
+    
+    /* ✨ 修正：移除了之前為了 badge 加的 flex 和 margin，改回最乾淨的樣式 */
+    .mrn{font-family:var(--mono); font-size:12px; color:var(--muted); white-space:nowrap;}
+    
     .name{font-weight:900; line-height:1.2; white-space:normal; word-break:break-word;}
     .meta{color:var(--muted); font-size:12px; margin-top:6px; line-height:1.35}
     .tags{display:flex; flex-wrap:wrap; gap:6px; margin-top:8px}
@@ -112,20 +125,6 @@
       border:1px solid var(--line); color:#3b3b3b; background:#fafafa;
     }
 
-    /* ✨ 新增 Culture 標籤樣式 */
-    .culture-badge {
-      display: inline-block;
-      background-color: #e3f2fd; /* 淡藍色底 */
-      color: #0d47a1;           /* 深藍色字 */
-      font-size: 11px;
-      font-weight: 700;
-      padding: 2px 6px;
-      border-radius: 4px;
-      border: 1px solid #bbdefb;
-      margin-right: 4px;        /* 與病歷號的間距 */
-      vertical-align: middle;
-    }
-    
     .controls{display:grid; gap:8px; margin-top:10px}
     .ctrl{
       display:flex; align-items:center; justify-content:space-between; gap:10px;
@@ -159,23 +158,38 @@
 
     <div class="grid">
       <div class="col">
-        <div class="colhead" style="background:var(--d1h)">D1 <small id="cntD1">0</small></div>
+        <div class="colhead" style="background:var(--d1h)">
+          <span>D1 <span id="opD1" class="op-head"></span></span>
+          <small id="cntD1">0</small>
+        </div>
         <div class="colbody" style="background:var(--d1)"><div id="listD1"></div></div>
       </div>
       <div class="col">
-        <div class="colhead" style="background:var(--d2h)">D2 <small id="cntD2">0</small></div>
+        <div class="colhead" style="background:var(--d2h)">
+          <span>D2 <span id="opD2" class="op-head"></span></span>
+          <small id="cntD2">0</small>
+        </div>
         <div class="colbody" style="background:var(--d2)"><div id="listD2"></div></div>
       </div>
       <div class="col">
-        <div class="colhead" style="background:var(--d3h)">D3 <small id="cntD3">0</small></div>
+        <div class="colhead" style="background:var(--d3h)">
+          <span>D3 <span id="opD3" class="op-head"></span></span>
+          <small id="cntD3">0</small>
+        </div>
         <div class="colbody" style="background:var(--d3)"><div id="listD3"></div></div>
       </div>
       <div class="col">
-        <div class="colhead" style="background:var(--d5h)">D5 <small id="cntD5">0</small></div>
+        <div class="colhead" style="background:var(--d5h)">
+          <span>D5 <span id="opD5" class="op-head"></span></span>
+          <small id="cntD5">0</small>
+        </div>
         <div class="colbody" style="background:var(--d5)"><div id="listD5"></div></div>
       </div>
       <div class="col">
-        <div class="colhead" style="background:var(--d7h)">D7 <small id="cntD7">0</small></div>
+        <div class="colhead" style="background:var(--d7h)">
+          <span>D7 <span id="opD7" class="op-head"></span></span>
+          <small id="cntD7">0</small>
+        </div>
         <div class="colbody" style="background:var(--d7)"><div id="listD7"></div></div>
       </div>
     </div>
@@ -277,10 +291,7 @@ function cardHTML(day, t){
     const meta = `${t.d0} · ${escapeHtml(t.doctor)} · ${escapeHtml(t.therapy)}`;
     const note = t.note ? `<div class="meta">備註：${escapeHtml(t.note)}</div>` : '';
 
-    // ✨ 處理 Culture 顯示 HTML
-    const cultureHtml = t.culture 
-      ? `<span class="culture-badge">🧫 ${escapeHtml(t.culture)}</span>` 
-      : '';
+    // ✨ 移除：原本在這裡產生 Culture 標籤的代碼已刪除，恢復卡片清爽 ✨
 
     const tags = [];
     if (t.state?.needD3) tags.push('需要D3回報');
@@ -374,9 +385,7 @@ function cardHTML(day, t){
       <div class="card">
         <div class="row1">
           <div class="name">${nameHtml}</div>
-          <div class="mrn">
-          ${cultureHtml}
-          ${escapeHtml(t.mrn || '')}</div>
+          <div class="mrn">${escapeHtml(t.mrn || '')}</div>
         </div>
         <div class="meta">${escapeHtml(meta)}</div>
         ${note}
@@ -387,9 +396,22 @@ function cardHTML(day, t){
   }
 
   function renderList(day, arr){
+    // 1. 更新數量
     $('cnt'+day).textContent = arr.length;
+    
+    // ✨ 2. 更新標題上的負責人名字 (只抓第一筆資料的名字)
+    // 邏輯：如果今天有病人(arr.length>0)，且第一個人有填負責人，就抓出來顯示
+    const opName = (arr.length > 0 && arr[0].culture) ? arr[0].culture : '';
+    const opEl = document.getElementById('op'+day);
+    if(opEl) {
+      // 顯示格式： (映)
+      opEl.textContent = opName ? `(${opName})` : ''; 
+    }
+
     const box = $('list'+day);
     if (!arr.length) { box.innerHTML = `<div class="empty">今天沒有 ${day} 待辦</div>`; return; }
+    
+    // 3. 產生卡片
     box.innerHTML = arr.map(t => cardHTML(day, t)).join('');
   }
 
